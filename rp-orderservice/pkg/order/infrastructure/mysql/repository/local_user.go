@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"fmt"
 
 	"gitea.xscloud.ru/xscloud/golib/pkg/infrastructure/mysql"
 	"github.com/google/uuid"

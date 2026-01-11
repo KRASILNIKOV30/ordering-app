@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"time"
 
 	"gitea.xscloud.ru/xscloud/golib/pkg/application/logging"
 	libio "gitea.xscloud.ru/xscloud/golib/pkg/common/io"
@@ -117,8 +118,9 @@ func messageHandler(logger logging.Logger) *cli.Command {
 				router := mux.NewRouter()
 				registerHealthcheck(router)
 				server := http.Server{
-					Addr:    cnf.Service.HTTPAddress,
-					Handler: router,
+					Addr:        cnf.Service.HTTPAddress,
+					Handler:     router,
+					ReadTimeout: 60 * time.Second,
 				}
 				graceCallback(c.Context, logger, cnf.Service.GracePeriod, server.Shutdown)
 				return server.ListenAndServe()
