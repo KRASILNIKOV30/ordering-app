@@ -1,48 +1,48 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-api
+  name: product-api
   labels:
-    app: user-api
+    app: product-api
 spec:
   replicas: 4
   strategy:
     type: RollingUpdate
   selector:
     matchLabels:
-      app: user-api
+      app: product-api
   template:
     metadata:
-      name: user-api
+      name: product-api
       labels:
-        app: user-api
+        app: product-api
     spec:
       initContainers:
-        - name: user-migrator
-          image: ordering-app-userservice:latest
+        - name: product-migrator
+          image: ordering-app-productservice:latest
           imagePullPolicy: Never
           command:
-            - /app/userservice
+            - /app/productservice
           args:
             - migrate
           env:
-            - name: USER_DATABASE_HOST
+            - name: PRODUCT_DATABASE_HOST
               value: mysql.infrastructure.svc.cluster.local:3306
-            - name: USER_DATABASE_NAME
-              value: userservice_db
-            - name: USER_DATABASE_USER
+            - name: PRODUCT_DATABASE_NAME
+              value: productservice_db
+            - name: PRODUCT_DATABASE_USER
               valueFrom:
                 secretKeyRef:
-                  name: user-database-access
-                  key: USER_DATABASE_USER
-            - name: USER_DATABASE_PASSWORD
+                  name: product-database-access
+                  key: PRODUCT_DATABASE_USER
+            - name: PRODUCT_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: user-database-access
-                  key: USER_DATABASE_PASSWORD
+                  name: product-database-access
+                  key: PRODUCT_DATABASE_PASSWORD
       containers:
-        - name: user-api
-          image: ordering-app-userservice:latest
+        - name: product-api
+          image: ordering-app-productservice:latest
           livenessProbe:
             httpGet:
               port: http
@@ -53,24 +53,24 @@ spec:
               path: /healthz
           imagePullPolicy: Never
           command:
-            - /app/userservice
+            - /app/productservice
           args:
             - service
           env:
-            - name: USER_DATABASE_HOST
+            - name: PRODUCT_DATABASE_HOST
               value: mysql.infrastructure.svc.cluster.local:3306
-            - name: USER_DATABASE_NAME
-              value: userservice_db
-            - name: USER_DATABASE_USER
+            - name: PRODUCT_DATABASE_NAME
+              value: productservice_db
+            - name: PRODUCT_DATABASE_USER
               valueFrom:
                 secretKeyRef:
-                  name: user-database-access
-                  key: USER_DATABASE_USER
-            - name: USER_DATABASE_PASSWORD
+                  name: product-database-access
+                  key: PRODUCT_DATABASE_USER
+            - name: PRODUCT_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: user-database-access
-                  key: USER_DATABASE_PASSWORD
+                  name: product-database-access
+                  key: PRODUCT_DATABASE_PASSWORD
           ports:
             - containerPort: 8081
               protocol: TCP
@@ -79,4 +79,3 @@ spec:
               protocol: TCP
               name: http
       restartPolicy: Always
-      

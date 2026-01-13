@@ -1,48 +1,48 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-message-handler
+  name: notification-message-handler
   labels:
-    app: user-message-handler
+    app: notification-message-handler
 spec:
   replicas: 1
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app: user-message-handler
+      app: notification-message-handler
   template:
     metadata:
-      name: user-message-handler
+      name: notification-message-handler
       labels:
-        app: user-message-handler
+        app: notification-message-handler
     spec:
       initContainers:
-        - name: user-migrator
-          image: ordering-app-userservice:latest
+        - name: notification-migrator
+          image: ordering-app-notificationservice:latest
           imagePullPolicy: Never
           command:
-            - /app/userservice
+            - /app/notificationservice
           args:
             - migrate
           env:
-            - name: USER_DATABASE_HOST
+            - name: NOTIFICATION_DATABASE_HOST
               value: mysql.infrastructure.svc.cluster.local:3306
-            - name: USER_DATABASE_NAME
-              value: userservice_db
-            - name: USER_DATABASE_USER
+            - name: NOTIFICATION_DATABASE_NAME
+              value: notificationservice_db
+            - name: NOTIFICATION_DATABASE_USER
               valueFrom:
                 secretKeyRef:
-                  name: user-database-access
-                  key: USER_DATABASE_USER
-            - name: USER_DATABASE_PASSWORD
+                  name: notification-database-access
+                  key: NOTIFICATION_DATABASE_USER
+            - name: NOTIFICATION_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: user-database-access
-                  key: USER_DATABASE_PASSWORD
+                  name: notification-database-access
+                  key: NOTIFICATION_DATABASE_PASSWORD
       containers:
-        - name: user-message-handler
-          image: ordering-app-userservice:latest
+        - name: notification-message-handler
+          image: ordering-app-notificationservice:latest
           livenessProbe:
             httpGet:
               port: http
@@ -53,38 +53,36 @@ spec:
               path: /healthz
           imagePullPolicy: Never
           command:
-            - /app/userservice
+            - /app/notificationservice
           args:
             - message-handler
           env:
-            - name: USER_DATABASE_HOST
+            - name: NOTIFICATION_DATABASE_HOST
               value: mysql.infrastructure.svc.cluster.local:3306
-            - name: USER_DATABASE_NAME
-              value: userservice_db
-            - name: USER_DATABASE_USER
+            - name: NOTIFICATION_DATABASE_NAME
+              value: notificationservice_db
+            - name: NOTIFICATION_DATABASE_USER
               valueFrom:
                 secretKeyRef:
-                  name: user-database-access
-                  key: USER_DATABASE_USER
-            - name: USER_DATABASE_PASSWORD
+                  name: notification-database-access
+                  key: NOTIFICATION_DATABASE_USER
+            - name: NOTIFICATION_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: user-database-access
-                  key: USER_DATABASE_PASSWORD
-            - name: USER_AMQP_HOST
+                  name: notification-database-access
+                  key: NOTIFICATION_DATABASE_PASSWORD
+            - name: NOTIFICATION_AMQP_HOST
               value: rabbitmq.infrastructure.svc.cluster.local:15672
-            - name: USER_AMQP_USER
+            - name: NOTIFICATION_AMQP_USER
               valueFrom:
                 secretKeyRef:
                   name: rabbitmq-secret
                   key: rabbitmq-username
-            - name: USER_AMQP_PASSWORD
+            - name: NOTIFICATION_AMQP_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: rabbitmq-secret
                   key: rabbitmq-password
-            - name: USER_TEMPORAL_HOST
-              value: temporal.infrastructure.svc.cluster.local:7233
           ports:
             - containerPort: 8081
               protocol: TCP
@@ -93,4 +91,3 @@ spec:
               protocol: TCP
               name: http
       restartPolicy: Always
-      

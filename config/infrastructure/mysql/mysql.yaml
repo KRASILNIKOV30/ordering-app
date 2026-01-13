@@ -79,6 +79,18 @@ spec:
             - name: mysql-user-service
               mountPath: /secrets/user-secret
               readOnly: true
+            - name: mysql-product-service
+              mountPath: /secrets/product-secret
+              readOnly: true
+            - name: mysql-payment-service
+              mountPath: /secrets/payment-secret
+              readOnly: true
+            - name: mysql-order-service
+              mountPath: /secrets/order-secret
+              readOnly: true
+            - name: mysql-notification-service
+              mountPath: /secrets/notification-secret
+              readOnly: true
       containers:
         - name: mysql
           image: mysql:8.0
@@ -102,3 +114,15 @@ spec:
         - name: mysql-user-service
           secret:
             secretName: mysql-user-service
+        - name: mysql-product-service
+          secret:
+            secretName: mysql-product-service
+        - name: mysql-payment-service
+          secret:
+            secretName: mysql-payment-service
+        - name: mysql-order-service
+          secret:
+            secretName: mysql-order-service
+        - name: mysql-notification-service
+          secret:
+            secretName: mysql-notification-service

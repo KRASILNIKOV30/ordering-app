@@ -5,3 +5,7 @@ resources:
   - namespace.yaml
   - rmq-secret.yaml
   - user
+  - product
+  - payment
+  - order
+  - notification

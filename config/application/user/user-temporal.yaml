@@ -19,9 +19,11 @@ spec:
     spec:
       initContainers:
         - name: user-migrator
-          image: user:latest
+          image: ordering-app-userservice:latest
           imagePullPolicy: Never
           command:
+            - /app/userservice
+          args:
             - migrate
           env:
             - name: USER_DATABASE_HOST
@@ -40,7 +42,7 @@ spec:
                   key: USER_DATABASE_PASSWORD
       containers:
         - name: user-temporal
-          image: user:latest
+          image: ordering-app-userservice:latest
           livenessProbe:
             httpGet:
               port: http
@@ -51,6 +53,8 @@ spec:
               path: /healthz
           imagePullPolicy: Never
           command:
+            - /app/userservice
+          args:
             - workflow-worker
           env:
             - name: USER_DATABASE_HOST
