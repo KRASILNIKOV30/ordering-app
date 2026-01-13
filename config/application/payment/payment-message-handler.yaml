@@ -72,7 +72,7 @@ spec:
                   name: payment-database-access
                   key: PAYMENT_DATABASE_PASSWORD
             - name: PAYMENT_AMQP_HOST
-              value: rabbitmq.infrastructure.svc.cluster.local:15672
+              value: rabbitmq.infrastructure.svc.cluster.local:5672
             - name: PAYMENT_AMQP_USER
               valueFrom:
                 secretKeyRef:

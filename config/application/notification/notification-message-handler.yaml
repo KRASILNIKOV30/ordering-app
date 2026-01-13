@@ -72,7 +72,7 @@ spec:
                   name: notification-database-access
                   key: NOTIFICATION_DATABASE_PASSWORD
             - name: NOTIFICATION_AMQP_HOST
-              value: rabbitmq.infrastructure.svc.cluster.local:15672
+              value: rabbitmq.infrastructure.svc.cluster.local:5672
             - name: NOTIFICATION_AMQP_USER
               valueFrom:
                 secretKeyRef:

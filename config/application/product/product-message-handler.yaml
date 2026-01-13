@@ -72,7 +72,7 @@ spec:
                   name: product-database-access
                   key: PRODUCT_DATABASE_PASSWORD
             - name: PRODUCT_AMQP_HOST
-              value: rabbitmq.infrastructure.svc.cluster.local:15672
+              value: rabbitmq.infrastructure.svc.cluster.local:5672
             - name: PRODUCT_AMQP_USER
               valueFrom:
                 secretKeyRef:
