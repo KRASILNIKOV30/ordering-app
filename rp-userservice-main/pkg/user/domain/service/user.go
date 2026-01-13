@@ -62,7 +62,6 @@ func (u userService) CreateUser(status model.UserStatus, login string) (uuid.UUI
 		return uuid.Nil, err
 	}
 
-	// тута кричим, что юзер создан
 	return userID, u.eventDispatcher.Dispatch(&model.UserCreated{
 		UserID:    userID,
 		Status:    status,

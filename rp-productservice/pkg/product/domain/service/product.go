@@ -61,7 +61,6 @@ func (s *productService) CreateProduct(name string, price int64, description *st
 		return uuid.Nil, err
 	}
 
-	// кричим, что продукт создан
 	return productID, s.eventDispatcher.Dispatch(&model.ProductCreated{
 		ProductID:   productID,
 		Name:        name,

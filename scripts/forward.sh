@@ -11,7 +11,7 @@ trap cleanup SIGINT
 # Функция проброса
 pf() {
     echo "🔄 Подключаю $1 ($2/$3)..."
-    kubectl port-forward -n $2 svc/$3 $4:$5 > /dev/null 2>&1 &
+    kubectl port-forward -n $2 svc/$3 $4:$5 2>&1 &
     PIDS+=($!)
 }
 
